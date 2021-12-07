@@ -26,13 +26,18 @@ int main() {
 	int *data = shmat(shmid, 0, 0);
 	int len = *data;
 
-	int fd = open("story.txt", O_RDONLY, 0777);
-	lseek(fd, -len, SEEK_END);
-	char line[len+1];
-	read(fd, line, len+1);
-	line[len] = 0;
-	printf("Last line: %s", line);
-	close(fd);
+	int fd;
+	if (len) {
+		fd = open("story.txt", O_RDONLY, 0777);
+		lseek(fd, -len, SEEK_END);
+		char line[len+1];
+		read(fd, line, len+1);
+		line[len] = 0;
+		printf("Last line: %s", line);
+		close(fd);
+	} else {
+		printf("The story is just getting started!\n");
+	}
 
 	fd = open("story.txt", O_WRONLY | O_APPEND, 0777);
 	char buf[1000];
